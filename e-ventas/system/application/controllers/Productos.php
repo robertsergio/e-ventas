@@ -4,8 +4,9 @@ class Productos extends Controller{
 
 	public $data=null;
 
-	public function Productos() {
+	public function Productos($navlist) {
 		parent::Controller();
+		$this->data['navlist']=$navlist;
 		$this->data['upload_data']= null;
 	}
 
@@ -42,7 +43,7 @@ class Productos extends Controller{
 		$this->load->vars($this->data);
 		$this-> load-> view('template');
 	}
-	//Redirecciona al formulario que será editado.
+	//Redirecciona al formulario que serï¿½ editado.
 	public function editar($id) {
 		$this->data['producto']=$this->ModeloProducto->getProducto($id);
 		$this->data['id']=$id;

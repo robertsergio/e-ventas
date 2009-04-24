@@ -25,8 +25,34 @@ class Inicio extends Controller {
 			if($user!=null)
 			{
 				$this->session->set_userdata($user);//El vector user ya tiene solo los datos necesarios.
+				
+				$navAdmin=array(
+						'Gestionar Usuarios'=>'usuarios/',
+						'Gestionar Productos'=>'productos/',
+						'Gestionar Pedidos'=>'#',
+						'Gestionar Clientes'=>'#',
+						);
+				$navVendedor=array(
+						'Solicitar pedido'=>'#',
+						'Consultar Comisiones'=>'#',
+						'Gestionar Clientes'=>'#',
+						'Gestionar Productos'=>'#',
+						'Consultar Ventas'=>'#',
+						'Ver Mensajes'=>'#',
+						);
+				$navSupervisor=array(
+						'Gestionar Vendedores'=>'usuarios/',
+						'Gestionar Pedidos'=>'#',
+						'Gestionar Clientes'=>'#',
+						'Consultar Pagos'=>'#',
+						'Consultar Ventas'=>'#',
+						'Ver Mensajes'=>'#',
+						);
+				
+							
 				$this->session->set_flashdata('mensaje','Bienvenido '.$user['nombre']);
 				//Debemos rediregir a la pagina inicio del usuario.
+				
 				redirect('productos/');	
 			}else{
 				$this->session->set_flashdata('mensaje','Contraseña invalida.');
