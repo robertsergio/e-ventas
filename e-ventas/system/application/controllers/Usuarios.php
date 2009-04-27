@@ -35,7 +35,7 @@
 		$this->session->set_flashdata('mensaje',"El usuario fue borrado con exito.");
 		redirect('/usuarios');
 	}
- 	//Redirecciona al formulario que ser� editado.
+ 	//Redirecciona al formulario que sera editado.
 	public function editar($id) {
 		$this->data['usuario']=$this->ModeloUsuario->getUsuario($id);
 		$this->data['id']=$id;
@@ -167,9 +167,9 @@
 		$this->form_validation->set_rules('username', 'Username', 'required');
 		$this->form_validation->set_rules('telefono', 'Telefono', 'numeric');
 		$this->form_validation->set_rules('celular', 'Celular', 'numeric');
-		$this->form_validation->set_rules('barrio', 'Barrio', 'callback_barrio_check');
+		$this->form_validation->set_rules('barrio_id', 'Barrio', 'callback_barrio_check');
 		$this->form_validation->set_message('barrio_check', "Debe seleccionar algun barrio.");
-		$this->form_validation->set_rules('rol', 'Rol', 'callback_rol_check');
+		$this->form_validation->set_rules('rol_id', 'Rol', 'callback_rol_check');
 		$this->form_validation->set_message('rol_check', "Debe seleccionar algun rol.");
 
 		if ($this->form_validation->run() == FALSE)
@@ -202,19 +202,23 @@
 				$datos['id']=$_POST['id'];
 				$datos['nombre']=$_POST['nombre'];
 				$datos['apellido']=$_POST['apellido'];
-				$datos['username']=$_POST['username'];
+				$datos['username']=strtolower($_POST['username']);//Username se guarda en minusculas.
+				
+				if($_POST['password']!="")
+					$datos['password']=md5($_POST['password']);//El password se guarda en md5.
+				
 				$datos['apellido']=$_POST['apellido'];
 				$datos['direccion']=$_POST['direccion'];
-				$datos['barrio_id']=$_POST['barrio'];
+				$datos['barrio_id']=$_POST['barrio_id'];
 				$datos['email']=$_POST['email'];
 				$datos['telefono']=$_POST['telefono'];
 				$datos['celular']=$_POST['celular'];
-				$datos['rol_id']=$_POST['rol'];
+				$datos['rol_id']=$_POST['rol_id'];
 				
 				//Guardo los datos del producto en la base de datos.
 				$nuevoProducto= new ModeloUsuario($datos);
 				$nuevoProducto->actualizarUsuario();
-				$this->session->set_flashdata('mensaje',"El producto fue agregado con exito.");
+				$this->session->set_flashdata('mensaje',"El usuario fue editado con exito.");
 				redirect('/usuarios');
 
 		}

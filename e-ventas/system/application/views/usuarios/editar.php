@@ -21,7 +21,10 @@
 				<td><b>Username:</b></td>
 				<td><?php echo form_input('username',$usuario['username']);?></td>
 			</tr>
-			
+			<tr>
+				<td><b>Contraseña:</b></td>
+				<td><?php echo form_input('password');?></td>
+			</tr>
 			<tr>
 				<td><b>Direccion:</b></td>
 				<td><?php echo form_input('direccion',$usuario['direccion']);?></td>
@@ -82,7 +85,7 @@
 			<tr>
 				<td><b>Rol:</b></td>
 				<td>
-					<select name="rol" id="rol" >
+					<select name="rol_id" id="rol_id" >
 						<option value="ape">[Seleccione un Rol]</option>
         				<?php foreach($roles as $key => $value)
         					{
@@ -102,7 +105,7 @@
 	</table>
 	<br>
 	<br>
-	<?php echo form_submit('agregar', 'Agregar'); ?>
+	<?php echo form_submit('guardar', 'Guardar'); ?>
 
 <?php echo form_close()?>
 

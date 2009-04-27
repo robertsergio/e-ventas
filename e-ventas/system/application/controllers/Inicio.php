@@ -1,8 +1,18 @@
 <?php
 class Inicio extends Controller {
+	var $_guardia=null;// El guardia maneja todo lo referente a la session del usuario.
+	
 	function Inicio() {
 		parent::Controller();
+		$this->_guardia=new Centinela();
 	}
+	
+	function index() {
+		$this->data['main']='welcome';
+		$this->load->vars($this->data);
+		$this-> load-> view('template');
+	}
+	
 	/**
 	 * Se utiliza para logear a un usuario.
 	 * 
@@ -21,39 +31,12 @@ class Inicio extends Controller {
 			$this-> load-> view('usuarios/login');	
 		}else
 		{
-			$user=$this->ModeloUsuario->autenticar(strtolower($_POST['username']),md5($_POST['password']));
-			if($user!=null)
+			if($this->_guardia->login($_POST['username'],$_POST['password']))
 			{
-				$this->session->set_userdata($user);//El vector user ya tiene solo los datos necesarios.
-				
-				$navAdmin=array(
-						'Gestionar Usuarios'=>'usuarios/',
-						'Gestionar Productos'=>'productos/',
-						'Gestionar Pedidos'=>'#',
-						'Gestionar Clientes'=>'#',
-						);
-				$navVendedor=array(
-						'Solicitar pedido'=>'#',
-						'Consultar Comisiones'=>'#',
-						'Gestionar Clientes'=>'#',
-						'Gestionar Productos'=>'#',
-						'Consultar Ventas'=>'#',
-						'Ver Mensajes'=>'#',
-						);
-				$navSupervisor=array(
-						'Gestionar Vendedores'=>'usuarios/',
-						'Gestionar Pedidos'=>'#',
-						'Gestionar Clientes'=>'#',
-						'Consultar Pagos'=>'#',
-						'Consultar Ventas'=>'#',
-						'Ver Mensajes'=>'#',
-						);
-				
-							
-				$this->session->set_flashdata('mensaje','Bienvenido '.$user['nombre']);
+				$this->session->set_flashdata('mensaje','Bienvenido '.$this->session->userdata('nombre'));
 				//Debemos rediregir a la pagina inicio del usuario.
 				
-				redirect('productos/');	
+				redirect('inicio/');	
 			}else{
 				$this->session->set_flashdata('mensaje','Contraseña invalida.');
 				redirect('inicio/login');
@@ -66,7 +49,7 @@ class Inicio extends Controller {
 	 * 
 	 */
 	function logout() {
-		$this->session->sess_destroy();
+		$this->_guardia->logout();
 		redirect('inicio/login');
 	}
 	

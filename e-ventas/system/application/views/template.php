@@ -25,11 +25,11 @@ and open the template in the editor.
        		<div id="header">
                 <?php $this->load->view('header'); ?>
             </div>
-         	<div id="nav">
+            <div id="nav">
                 <?php $this->load->view('navigation'); ?>
             </div>
-            
-            <div id="main">
+         	<div id="main">
+         			
                 
 					<?php if($mensaje=$this->session->flashdata('mensaje'))
 					{

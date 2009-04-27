@@ -2,17 +2,16 @@
 
 class Productos extends Controller{
 
-	public $data=null;
-
-	public function Productos($navlist) {
+	var $data=null;
+	
+	public function Productos() {
 		parent::Controller();
-		$this->data['navlist']=$navlist;
 		$this->data['upload_data']= null;
+		
 	}
 
 	public function index(){
-		//$data['navlist'] = $this->ModeloCategoria->getAllCategorias();
-		
+				
 		//Traigo la libreria para la paginacion.
 		$this->load->library('pagination');
 		//Otras configuraciones para la paginacion estan en  config/pagination.php
@@ -43,7 +42,7 @@ class Productos extends Controller{
 		$this->load->vars($this->data);
 		$this-> load-> view('template');
 	}
-	//Redirecciona al formulario que ser� editado.
+	//Redirecciona al formulario que sera editado.
 	public function editar($id) {
 		$this->data['producto']=$this->ModeloProducto->getProducto($id);
 		$this->data['id']=$id;
