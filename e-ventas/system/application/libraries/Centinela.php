@@ -38,7 +38,7 @@ class Centinela
 						'Ver Mensajes'=>'#',
 						);
 		$navVendedor=array(
-						'Solicitar pedido'=>'#',
+						'Solicitar pedido'=>'productos/carrito',
 						'Consultar pedidos'=>'#',
 						'Consultar Comisiones'=>'#',
 						'Gestionar Clientes'=>'#',

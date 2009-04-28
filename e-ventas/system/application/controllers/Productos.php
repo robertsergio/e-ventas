@@ -241,6 +241,87 @@ class Productos extends Controller{
 			return TRUE;
 		}
 	}
-
+	/**
+	 * Lista los productos con el link de agregar al carrito.
+	 * @return unknown_type
+	 */
+	public function carrito() {
+		//Traigo datos del carrito.
+		$this->data['cart']=$this->session->userdata('cart');
+		
+		//Traigo la libreria para la paginacion.
+		$this->load->library('pagination');
+		//Otras configuraciones para la paginacion estan en  config/pagination.php
+		$config['base_url'] = base_url()."/productos/carrito/";
+		$config['total_rows']= $this->ModeloProducto->cantidad_filas();
+		$config['per_page'] = '4'; //Cantidad por pagina.
+		$this->pagination->initialize($config);
+		
+		$offset=$this->uri->segment($this->uri->total_segments()); //Traigo el ultimo segmento.
+		
+		$this->data['items']= $this->ModeloProducto->getAllProductos($config['per_page'],$offset);
+		
+		$this->data['main']='productos/listarShop';
+		$this->load->vars($this->data);
+		$this-> load-> view('template');
+	}
+	
+	/**
+	 * Agrega un producto al carrito.
+	 * @param $idProducto Id del producto que se quiere agregar
+	 * @return unknown_type
+	 */
+	public function agregarCarrito($idProducto) {
+		$producto=$this->ModeloProducto->getProducto($idProducto);
+		$cart=$this->session->userdata('cart');
+		$totalprecio=0;
+		if(count($producto))
+		{
+			if(isset($cart[$idProducto]))
+			{
+				$prevNombre=$cart[$idProducto]['nombre'];
+				$prevPrecio=$cart[$idProducto]['precio'];
+				$prevCant=$cart[$idProducto]['cantidad'];
+				
+				$cart[$idProducto]=array(
+						'nombre'=>$prevNombre,
+						'precio'=>$prevPrecio,
+						'cantidad'=>$prevCant+1
+				);
+			}else{
+				$cart[$idProducto]=array(
+						'nombre'=>$producto['nombre'],
+						'precio'=>$producto['precio'],
+						'cantidad'=>1
+				);
+			}
+			foreach ($cart as $id => $product) {
+				$totalprecio += $product['precio']*$product['cantidad'];
+			}
+			
+			$this->session->set_userdata('precioTotal',$totalprecio);
+			$this->session->set_userdata('cart',$cart);
+			$this->session->set_flashdata('mensaje','El producto "'.$producto['nombre'].'" fue agregado al carrito.');
+			redirect('/productos/carrito');
+		}else
+		{
+			//redirecciono si el id no es valido.
+			redirect('/productos/carrito');
+		}
+	}
+	public function verCarrito() {
+		$this->data['precioTotal']=$this->session->userdata('precioTotal');
+		$this->data['cart']=$this->session->userdata('cart');
+		if($this->data['cart']==null)
+		{
+			$this->session->set_flashdata('mensaje','El carrito está vacío.');
+			redirect('/productos/carrito');
+		}else{
+			$this->data['main']='productos/verCarrito';
+			$this->load->vars($this->data);
+			$this-> load-> view('template');	
+		}
+		
+	}
 }
 ?>

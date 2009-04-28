@@ -1,12 +1,15 @@
-<div class="titulonav">
-		Operaciones
-</div>
-<div class="cuerporec">
-	<?php
-		$guardia=new Centinela();
-	    $navlist=$guardia->operaciones();
-	    if(count($navlist))
-	    {
+<?php
+	 $guardia=new Centinela();
+	 $navlist=$guardia->operaciones();
+	 if(count($navlist)):
+	 	?>
+	
+	<div class="titulonav">
+		<?php
+			echo 'Operaciones';?>
+	</div>
+	<div class="cuerporec">
+	    <?php 
 	        echo "<ul>";
 	        foreach ($navlist as $nombre => $url) 
 	        {
@@ -16,7 +19,8 @@
 	              
 	        }
 	        echo "</ul>";
-	        
-	    }
-	?>
-</div>
+	    ?>
+    </div>       
+	 <?php
+	   endif;?>
+	
