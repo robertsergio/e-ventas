@@ -13,16 +13,22 @@ class Centinela
 	 * Verifica el login de un usuario.
 	 * @return Retorna false si el usuario o contrasenha no corresponden.
 	 */
-	function login($nombre, $pwd) 
+	function login($nombre=null, $pwd=null) 
 	{
 		
-		$user=$this->_CI->ModeloUsuario->autenticar(strtolower($nombre),md5($pwd));
-		if($user!=null)
+		if($nombre==null || $pwd==null)
+			return false;
+		else
 		{
-			$this->_CI->session->set_userdata($user);
-			return true;
+			$user=$this->_CI->ModeloUsuario->autenticar(strtolower($nombre),md5($pwd));
+			if($user!=null)
+			{
+				$this->_CI->session->set_userdata($user);
+				return true;
+			}
+			return false;	
 		}
-		return false;
+		
 	}
 	/**
 	 * Define un vector con las operaciones que puede realizar un rol determinado.
@@ -73,7 +79,16 @@ class Centinela
 		$this->_CI->session->sess_destroy();
 		
 	}
-	
+	/**
+	 * Verifica si existe alguien logeado.
+	 * @return booleano
+	 */
+	function conectado() {
+		if($this->_CI->session->userdata('nombre'))
+			return true;
+		else
+			return false;
+	}
 	
 }
 ?>
