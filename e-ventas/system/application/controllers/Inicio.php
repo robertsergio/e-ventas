@@ -38,7 +38,7 @@ class Inicio extends Controller {
 				
 				redirect('inicio/');	
 			}else{
-				$this->session->set_flashdata('mensaje','Contraseña invalida.');
+				$this->session->set_flashdata('mensaje','Ups.. Autenticación Fallida.');
 				redirect('inicio/login');
 			}
 		}

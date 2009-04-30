@@ -155,14 +155,14 @@ class ModeloUsuario extends Model
 		return $query->num_rows();
 	}
 	/**
-	 * Retorna un vector con los valores utiles para guardar en la session.
+	 * Autentica a un usuario y retorna un vector con los valores utiles para guardar en la session.
 	 * @param $usuario Username del usuario en minusculas.
 	 * @param $pwd es el password convertido a md5.
 	 * @return Un vector con los datos del usuario.
 	 */
 	public function autenticar($usuario,$pwd) {
 		$data = array();
-		$consulta='select * from usuarios where username="'.$usuario.'" and password="'.$pwd.'"';
+		$consulta='select * from usuarios where username="'.$usuario.'" and password="'.$pwd.'"'.'and borrado=false';
 		$query =$this->db->query($consulta);
 		if ($query->num_rows() > 0)
 		{

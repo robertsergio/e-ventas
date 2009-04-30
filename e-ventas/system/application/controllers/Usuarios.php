@@ -7,7 +7,7 @@
 		
 		$this->data['upload_data']= null;
 	}
- 	public function index()
+ 	public function listar()
  	{
 		//Traigo la libreria para la paginacion.
 		$this->load->library('pagination');
@@ -33,7 +33,7 @@
  	public function borrar($id) {
 		$this->ModeloUsuario->borrarUsuario($id);
 		$this->session->set_flashdata('mensaje',"El usuario fue borrado con exito.");
-		redirect('/usuarios');
+		redirect('/usuarios/listar');
 	}
  	//Redirecciona al formulario que sera editado.
 	public function editar($id) {
@@ -149,7 +149,7 @@
 				$nuevoProducto->agregarUsuario();
 				$this->session->set_flashdata('mensaje',"El usuario fue agregado con exito.");
 				
-				redirect('/usuarios');
+				redirect('/usuarios/listar');
 
 		}
 		 
@@ -219,7 +219,7 @@
 				$nuevoProducto= new ModeloUsuario($datos);
 				$nuevoProducto->actualizarUsuario();
 				$this->session->set_flashdata('mensaje',"El usuario fue editado con exito.");
-				redirect('/usuarios');
+				redirect('/usuarios/listar');
 
 		}
 	}

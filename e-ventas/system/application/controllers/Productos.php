@@ -10,7 +10,7 @@ class Productos extends Controller{
 		
 	}
 
-	public function index(){
+	public function listar(){
 				
 		//Traigo la libreria para la paginacion.
 		$this->load->library('pagination');
@@ -62,7 +62,7 @@ class Productos extends Controller{
 	public function borrar($id) {
 		$this->ModeloProducto->borrarProducto($id);
 		$this->session->set_flashdata('mensaje',"El producto fue borrado con exito.");
-		redirect('/productos');
+		redirect('/productos/listar');
 	}
 	/*
 	 * Con esta funcion redireccionamos al formulario para agregar un producto.
@@ -131,7 +131,7 @@ class Productos extends Controller{
 				$nuevoProducto= new ModeloProducto($datos);
 				$nuevoProducto->agregarProducto();
 				$this->session->set_flashdata('mensaje',"El producto fue agregado con exito.");
-				redirect('/productos');
+				redirect('/productos/listar');
 			}
 				
 
@@ -189,7 +189,7 @@ class Productos extends Controller{
 				
 				$nuevoProducto= new ModeloProducto($datos);
 				$nuevoProducto->actualizarProducto();
-				redirect('/productos');
+				redirect('/productos/listar');
 			}
 		}
 		

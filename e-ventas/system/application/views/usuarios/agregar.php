@@ -82,4 +82,4 @@
 
 <?php echo form_close()?>
 
-<?php echo anchor("usuarios/",'Volver');?><br>
+<?php echo anchor("usuarios/listar",'Volver');?><br>

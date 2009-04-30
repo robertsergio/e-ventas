@@ -31,14 +31,15 @@ class Centinela
 		
 	}
 	/**
-	 * Define un vector con las operaciones que puede realizar un rol determinado.
+	 * Retorna un vector que luego es utilizada para generar en la vista
+	 * la barra de operaciones.
 	 * Retorna null, si es que la session no esta creada.
-	 * @return 
+	 * @return Vector de Operaciones
 	 */
 	function operaciones() {
 		$navAdmin=array(
-						'Gestionar Usuarios'=>'usuarios/',
-						'Gestionar Productos'=>'productos/',
+						'Gestionar Usuarios'=>'usuarios/listar',
+						'Gestionar Productos'=>'productos/listar',
 						'Gestionar Pedidos'=>'#',
 						'Gestionar Clientes'=>'#',
 						'Ver Mensajes'=>'#',
@@ -73,6 +74,73 @@ class Centinela
 		}else
 			return null;
 		
+	}
+	/**
+	 * Verifica si un usuario puede realizar una determinada operacion.
+	 * Retorna false si no puede realizar una operacion, sino retorna true.
+	 * @return boolean
+	 */
+	function checkPermiso() 
+	{
+		if($this->_CI->session->userdata('nombre')!=null)
+		{
+			$permisos=$this->getPermisos();
+			$controladorUrl=$this->_CI->uri->segment(1);//Saco el nombre del modulo de la uri.
+			$operacionUrl=$this->_CI->uri->segment(2);//Saco el nombre del modulo de la uri.
+			if($permisos!=null && $controladorUrl!=false && $operacionUrl!=false)
+			{
+				if($controladorUrl==null)
+						return false;
+				else
+				{
+						$vecOper=$permisos[$controladorUrl];
+						if ($vecOper!='')
+						{
+							foreach ($vecOper as $accion) {
+								if($accion==$operacionUrl)
+									return true;
+							}
+					
+						}	
+						
+						
+				}
+										
+			}
+		}
+		return false;
+	}
+	/**
+	 * Retorna los permisos que tiene un determinado rol.
+	 * @return unknown_type
+	 */
+	function getPermisos() {
+		//El vector de permisos tiene como clave el nombre del controlador y valor el nombre de la operacion.
+		$Admin=array(
+						'usuarios'=>array('listar','ver','borrar','editar','agregar','crear','actualizar'),
+						'productos'=>array('listar','ver','borrar','editar','agregar','crear','actualizar')
+						
+						);
+		$Vendedor=array(
+						'productos'=>array('carrito','agregarCarrito','verCarrito')
+						
+						);
+		$Supervisor=array(
+						'usuarios'=>array('listarVendedor','ver','borrarVendedor','editarVendedor','agregarVendedor','crearVendedor','actualizarVendedor')
+						);
+		
+		$rol_id= $this->_CI->session->userdata('rol_id');
+		
+		if($rol_id!=null)
+		{
+			if($rol_id==1)
+				return $Admin;
+			elseif($rol_id==2)
+				return $Supervisor;
+			else
+				return $Vendedor;	
+		}else
+			return null;
 	}
 	function logout() 
 	{
