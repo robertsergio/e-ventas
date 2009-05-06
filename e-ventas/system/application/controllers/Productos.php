@@ -15,7 +15,7 @@ class Productos extends Controller{
 		//Traigo la libreria para la paginacion.
 		$this->load->library('pagination');
 		//Otras configuraciones para la paginacion estan en  config/pagination.php
-		$config['base_url'] = base_url()."/productos/index/";
+		$config['base_url'] = base_url()."/productos/listar/";
 		$config['total_rows']= $this->ModeloProducto->cantidad_filas();
 		$config['per_page'] = '4'; //Cantidad por pagina.
 		$this->pagination->initialize($config);

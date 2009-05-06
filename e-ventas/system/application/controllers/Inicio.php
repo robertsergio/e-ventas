@@ -7,10 +7,26 @@ class Inicio extends Controller {
 		$this->_guardia=new Centinela();
 	}
 	
-	function index() {
-		$this->data['main']='welcome';
-		$this->load->vars($this->data);
-		$this-> load-> view('template');
+	/**
+	 * Aca se debe manejar para crear las paginas de los vendedores.
+	 * @return 
+	 */
+	function index($vendedor='') {
+		if(!$vendedor)
+			redirect('inicio/welcome');
+		else
+			show_error('Por ahora no hay nada.');
+	}
+	function welcome() {
+		
+		if($this->session->userdata('auth')=='true')
+		{
+			$this->data['main']='welcome';
+			$this->load->vars($this->data);
+			$this-> load-> view('template');	
+		}else
+			redirect('inicio/login');
+		
 	}
 	
 	/**
@@ -36,7 +52,7 @@ class Inicio extends Controller {
 				$this->session->set_flashdata('mensaje','Bienvenido '.$this->session->userdata('nombre'));
 				//Debemos rediregir a la pagina inicio del usuario.
 				
-				redirect('inicio/');	
+				redirect('inicio/welcome');	
 			}else{
 				$this->session->set_flashdata('mensaje','Ups.. Autenticación Fallida.');
 				redirect('inicio/login');

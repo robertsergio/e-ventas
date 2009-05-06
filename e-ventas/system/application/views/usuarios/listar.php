@@ -1,9 +1,5 @@
 <h2>Lista de Usuarios</h2>
 
-
-
-
-
 <table cellpadding="5" cellspacing="0">
 	<tr>
 		<td><b>Nombre</b> </td>

@@ -12,5 +12,5 @@
     <li>Rol:<?= $usuario['rol']?></li>
 </ul>
 
-<?php echo anchor("usuarios/",'Volver');?>
+<?php echo anchor("usuarios/listar",'Volver');?>
 

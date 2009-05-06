@@ -42,7 +42,7 @@ class Centinela
 						'Gestionar Productos'=>'productos/listar',
 						'Gestionar Pedidos'=>'#',
 						'Gestionar Clientes'=>'#',
-						'Ver Mensajes'=>'#',
+						'Mensajes'=>'#',
 						);
 		$navVendedor=array(
 						'Solicitar pedido'=>'productos/carrito',
@@ -54,7 +54,7 @@ class Centinela
 						'Ver Mensajes'=>'#',
 						);
 		$navSupervisor=array(
-						'Gestionar Vendedores'=>'usuarios/',
+						'Gestionar Vendedores'=>'usuarios/listarVendedor',
 						'Gestionar Pedidos'=>'#',
 						'Gestionar Clientes'=>'#',
 						'Consultar Pagos'=>'#',
@@ -126,7 +126,7 @@ class Centinela
 						
 						);
 		$Supervisor=array(
-						'usuarios'=>array('listarVendedor','ver','borrarVendedor','editarVendedor','agregarVendedor','crearVendedor','actualizarVendedor')
+						'usuarios'=>array('listarVendedor','verVendedor','borrarVendedor','editarVendedor','agregarVendedor','crearVendedor','actualizarVendedor')
 						);
 		
 		$rol_id= $this->_CI->session->userdata('rol_id');

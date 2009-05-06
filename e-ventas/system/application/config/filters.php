@@ -19,5 +19,5 @@ $filter['perfmon'] = array(
 $filter['test'] = array(
 	'include', array('*'), array()
 );
-$filter['control_acceso'] = array('exclude', array('inicio/*'));
+$filter['control_acceso'] = array('exclude', array('inicio/*','usuarios/ajaxFindBarrio'));
 ?>

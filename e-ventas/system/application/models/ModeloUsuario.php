@@ -86,10 +86,12 @@ class ModeloUsuario extends Model
 						  usuarios.fecha_nac,
 						  usuarios.telefono,
 						  usuarios.celular,
+						  usuarios.ci,
 						  usuarios.direccion,
 						  usuarios.apellido,
 						  usuarios.rol_id,
 						  usuarios.barrio_id,
+						  usuarios.supervisor_id,
 						  supervisor.nombre as supervisor
 					FROM
 					      usuarios
@@ -149,11 +151,105 @@ class ModeloUsuario extends Model
 		
 		return $data;
 	}
+	
+	/**
+	 * Trae la cantidad de vendedores definido por $cantidad,
+	 * desde la fila definida por $offset y que son del supervisor con $id.
+	 * Si $cantidad es igual a cero, se trae todos los vendedores.
+	 * Si $id es igual a cero, se trae todos los vendedores.
+	 * Los usuarios con rol_id igual a 3 son considerados vendedores.
+	 * @return Array con todas las filas.
+	 */
+	public function getAllVendedores($id=0, $cantidad=0, $offset=0)
+	{
+		$data = array();
+		$this-> db-> select('usuarios.id,usuarios.nombre, usuarios.apellido,usuarios.username,roles.nombre as rol_nombre');
+		if($id==0)
+			$this-> db-> where(array('borrado'=>'false','rol_id'=>'3'));
+		else
+			$this-> db-> where(array('borrado'=>'false','rol_id'=>'3','supervisor_id'=>$id));
+			
+		$this->db->join('roles','usuarios.rol_id=roles.id');
+		if($cantidad==0)
+			$Q = $this-> db-> get('usuarios');
+		else
+			$Q = $this-> db-> get('usuarios',$cantidad,$offset);
+
+		if ($Q-> num_rows() > 0){
+			foreach ($Q-> result_array() as $row){
+				foreach($row as $_ind => $_val): 
+					$vec[$_ind] = $_val;  
+				endforeach;
+				$data[] = $vec;
+				
+				
+				
+			}
+		}
+		$Q-> free_result();
+		
+		
+		return $data;
+	}
+	/**
+	 * Trae la cantidad de supervisores definido por $cantidad,
+	 * desde la fila definida por $offset.
+	 * Si $cantidad es igual a cero, se trae todos los vendedores.
+	 * Los usuarios con rol_id igual a 3 son considerados vendedores.
+	 * @return Array con todas las filas.
+	 */
+	public function getAllSupervisores($cantidad=0, $offset=0)
+	{
+		$data = array();
+		$this-> db-> select('usuarios.id,usuarios.nombre, usuarios.apellido,usuarios.username,roles.nombre as rol_nombre');
+		$this-> db-> where(array('borrado'=>'false','rol_id'=>'2'));
+		$this->db->join('roles','usuarios.rol_id=roles.id');
+		if($cantidad==0)
+			$Q = $this-> db-> get('usuarios');
+		else
+			$Q = $this-> db-> get('usuarios',$cantidad,$offset);
+
+		if ($Q-> num_rows() > 0){
+			foreach ($Q-> result_array() as $row){
+				foreach($row as $_ind => $_val): 
+					$vec[$_ind] = $_val;  
+				endforeach;
+				$data[] = $vec;
+		
+			}
+		}
+		$Q-> free_result();
+		
+		
+		return $data;
+	}
+	
+	/**
+	 * Calcula la cantidad de usuarios que tiene el sistema.
+	 * @return La cantidad de usuarios.
+	 */
 	public function cantidad_filas()
 	{
 		$query =$this->db->getwhere('usuarios',array('borrado'=>'false'));
 		return $query->num_rows();
 	}
+	
+	/**
+	 * Calcula la cantidad de vendedores que tiene asignado un supervisor. Si no se
+	 * envia el id, se trae la cantidad de vendedores que tiene el sistema. El rol con id igual a 3
+	 * es el considerado como vendedor.
+	 * @param $id El id del supervisor.
+	 * @return unknown_type
+	 */
+	public function cantidad_vendedores($id=0)
+	{
+		if($id==0)
+			$query =$this->db->getwhere('usuarios',array('borrado'=>'false','rol_id'=>'3'));
+		else
+			$query =$this->db->getwhere('usuarios',array('borrado'=>'false','rol_id'=>'3','supervisor_id'=>$id));	
+		return $query->num_rows();
+	}
+	
 	/**
 	 * Autentica a un usuario y retorna un vector con los valores utiles para guardar en la session.
 	 * @param $usuario Username del usuario en minusculas.
@@ -172,6 +268,7 @@ class ModeloUsuario extends Model
    		   		'id'=>$row['id'],
    		   		'nombre'=>$row['nombre'],
    		   		'rol_id'=>$row['rol_id'],
+   		   		'auth'=>'true',
    		   );
 		   $query-> free_result();
 		   return $data; 
