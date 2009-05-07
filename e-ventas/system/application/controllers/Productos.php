@@ -275,6 +275,7 @@ class Productos extends Controller{
 		$producto=$this->ModeloProducto->getProducto($idProducto);
 		$cart=$this->session->userdata('cart');
 		$totalprecio=0;
+		$totalcomision=0;
 		if(count($producto))
 		{
 			if(isset($cart[$idProducto]))
@@ -282,35 +283,43 @@ class Productos extends Controller{
 				$prevNombre=$cart[$idProducto]['nombre'];
 				$prevPrecio=$cart[$idProducto]['precio'];
 				$prevCant=$cart[$idProducto]['cantidad'];
+				$prevCom=$cart[$idProducto]['comision'];
 				
 				$cart[$idProducto]=array(
 						'nombre'=>$prevNombre,
 						'precio'=>$prevPrecio,
+						'comision'=>$prevCom,
 						'cantidad'=>$prevCant+1
 				);
 			}else{
+				
 				$cart[$idProducto]=array(
 						'nombre'=>$producto['nombre'],
 						'precio'=>$producto['precio'],
+						'comision'=>(int)($producto['comision']*$producto['precio']),
 						'cantidad'=>1
 				);
 			}
 			foreach ($cart as $id => $product) {
 				$totalprecio += $product['precio']*$product['cantidad'];
+				$totalcomision+=$product['comision']*$product['cantidad'];
 			}
 			
 			$this->session->set_userdata('precioTotal',$totalprecio);
+			$this->session->set_userdata('comisionTotal',$totalcomision);
 			$this->session->set_userdata('cart',$cart);
 			$this->session->set_flashdata('mensaje','El producto "'.$producto['nombre'].'" fue agregado al carrito.');
 			redirect('/productos/carrito');
 		}else
 		{
 			//redirecciono si el id no es valido.
+			$this->session->set_flashdata('mensaje','Ese producto no existe.');
 			redirect('/productos/carrito');
 		}
 	}
 	public function verCarrito() {
 		$this->data['precioTotal']=$this->session->userdata('precioTotal');
+		$this->data['comisionTotal']=$this->session->userdata('comisionTotal');
 		$this->data['cart']=$this->session->userdata('cart');
 		if($this->data['cart']==null)
 		{

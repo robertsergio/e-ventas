@@ -27,6 +27,10 @@
 				<td><?php echo form_input('password');?></td>
 			</tr>
 			<tr>
+				<td><b>Confirmar Contraseña:</b></td>
+				<td><?php echo form_password('co_password');?></td>
+			</tr>
+			<tr>
 				<td><b>Direccion:</b></td>
 				<td><?php echo form_input('direccion',$usuario['direccion']);?></td>
 			</tr>

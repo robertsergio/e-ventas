@@ -70,7 +70,7 @@
 		//Traigo las ciudades y los roles para el select.
 		$this->data['ciudades'] =$this->traerCiudades();
 		$this->data['roles'] =$this->traerRoles();
-		
+		$this->data['supervisor']=$this->traerSupervisores();
 		//Traigo los barrios para el select.
 		$this->data['barrios']=$this->traerBarrios($this->data['usuario']['ciudad_id']);
 		
@@ -122,22 +122,9 @@
 			
 		$this->load->helper(array('form', 'url'));
 		//Validacion de formulario.
+		$this->validar_formulario_usuario(false);
 		$this->load->library('form_validation');
-		 
-		$this->form_validation->set_error_delimiters('<li>', '</li>');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'required');
-		$this->form_validation->set_rules('apellido', 'Apellidos', 'required');
-		$this->form_validation->set_rules('direccion', 'Direccion', 'required');
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('password', 'Contraseña', 'required|matches[co_password]');
-		$this->form_validation->set_rules('co_password', 'Confirmar Contraseña', 'required');
-		$this->form_validation->set_rules('telefono', 'Telefono', 'numeric');
-		$this->form_validation->set_rules('celular', 'Celular', 'numeric');
-		$this->form_validation->set_rules('barrio_id', 'Barrio', 'callback_barrio_check');
-		$this->form_validation->set_message('barrio_check', "Debe seleccionar algun barrio.");
-		$this->form_validation->set_rules('rol_id', 'Rol', 'callback_rol_check');
-		$this->form_validation->set_message('rol_check', "Debe seleccionar algun rol.");
-
+		
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->data['creador_id']=$this->session->userdata('id');//El id del creador es el supervisor.
@@ -206,23 +193,15 @@
  	{
 		$this->load->helper(array('form', 'url'));
 		//Validacion de formulario.
+		$this->validar_formulario_usuario(true);
 		$this->load->library('form_validation');
-		 
-		$this->form_validation->set_error_delimiters('<li>', '</li>');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'required');
-		$this->form_validation->set_rules('apellido', 'Apellidos', 'required');
-		$this->form_validation->set_rules('direccion', 'Direccion', 'required');
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('telefono', 'Telefono', 'numeric');
-		$this->form_validation->set_rules('celular', 'Celular', 'numeric');
-		$this->form_validation->set_rules('barrio_id', 'Barrio', 'callback_barrio_check');
-		$this->form_validation->set_message('barrio_check', "Debe seleccionar algun barrio.");
-		$this->form_validation->set_rules('rol_id', 'Rol', 'callback_rol_check');
-		$this->form_validation->set_message('rol_check', "Debe seleccionar algun rol.");
-
+		
 		if ($this->form_validation->run() == FALSE)
 		{
-			//Hago lo mismo que en la funcion agregar.
+			//Preparo el formulario.
+			$this->data['id']=$_POST['id'];
+			$this->data['usuario']=$this->ModeloUsuario->getUsuario($_POST['id']);
+			
 			$this->data['roles'] =$this->traerRoles();	
 			$this->data['ciudades'] =$this->traerCiudades();
 			$this->data['supervisores']=$this->traerSupervisores();
@@ -258,11 +237,9 @@
 	public function agregar() {
 
 		//Traigo las ciudades y los roles.
-		$dat['ciudades']=$this->traerCiudades();
-		$dat['roles']=$this->traerRoles();
-		$this->data['ciudades'] =$dat['ciudades'];
-		$this->data['roles'] =$dat['roles'];
-		
+		$this->data['ciudades'] =$this->traerCiudades();
+		$this->data['roles'] =$this->traerRoles();
+		$this->data['supervisor']=$this->traerSupervisores();
 		
 		$this->data['main']='usuarios/agregar';
 		$this->load->vars($this->data);
@@ -290,61 +267,33 @@
 	public function crear() {
 		$this->load->helper(array('form', 'url'));
 		//Validacion de formulario.
+		$this->validar_formulario_usuario(false);
 		$this->load->library('form_validation');
-		 
-		$this->form_validation->set_error_delimiters('<li>', '</li>');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'required');
-		$this->form_validation->set_rules('apellido', 'Apellidos', 'required');
-		$this->form_validation->set_rules('direccion', 'Direccion', 'required');
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('password', 'Contraseña', 'required|matches[co_password]');
-		$this->form_validation->set_rules('co_password', 'Confirmar Contraseña', 'required');
-		$this->form_validation->set_rules('telefono', 'Telefono', 'numeric');
-		$this->form_validation->set_rules('celular', 'Celular', 'numeric');
-		$this->form_validation->set_rules('barrio_id', 'Barrio', 'callback_barrio_check');
-		$this->form_validation->set_message('barrio_check', "Debe seleccionar algun barrio.");
-		$this->form_validation->set_rules('rol_id', 'Rol', 'callback_rol_check');
-		$this->form_validation->set_message('rol_check', "Debe seleccionar algun rol.");
-
+				
 		if ($this->form_validation->run() == FALSE)
 		{
-			//Hago lo mismo que en la funcion agregar.
-			
-			$roles= $this->ModeloRol->getAllRoles();
-			//Preparo el vector Roles para pasarle a la vista.
-			foreach ($roles as $rol){
-				$op[$rol['id']]= $rol['nombre'];
-			}
-			$this->data['roles'] =$op;	
-			$city= $this->ModeloCiudad->getAllCiudades();
-			//Preparo el vector Ciudades para pasarle a la vista.
-			foreach ($city as $ciudad){
-				$opciones[$ciudad['id']]= $ciudad['nombre'];
-			}
-	
-			$this->data['ciudades'] =$opciones;
+			$this->data['roles'] =$this->traerRoles();	
+			$this->data['ciudades'] =$this->traerCiudades();
+			$this->data['supervisores']=$this->traerSupervisores();
 			$this->data['main']='usuarios/agregar';
 			$this->load->vars($this->data);
-			$this-> load-> view('template');
+			$this->load-> view('template');
 		}
 		else
 		{
-				/*@todo Cambiar el formulario para pasarle al modelo el vector post.*/
-				$datos['nombre']=$_POST['nombre'];
-				$datos['apellido']=$_POST['apellido'];
+				$datos=$_POST;
+				
 				$datos['username']=strtolower($_POST['username']);//Username se guarda en minusculas.
 				$datos['password']=md5($_POST['password']);//El password se guarda en md5.
-				$datos['apellido']=$_POST['apellido'];
-				$datos['direccion']=$_POST['direccion'];
-				$datos['barrio_id']=$_POST['barrio_id'];
-				$datos['email']=$_POST['email'];
-				$datos['telefono']=$_POST['telefono'];
-				$datos['celular']=$_POST['celular'];
-				$datos['rol_id']=$_POST['rol_id'];
-				
+				//borro los datos basura que no me sirven.
+				unset($datos['agregar']);
+				unset($datos['co_password']);
+				unset($datos['ciudad']);
+				if($_POST['rol_id']!=3)//Si el rol no es un vendedor no se requiere un supervisor.
+					unset($datos['supervisor_id']);
 				//Guardo los datos del producto en la base de datos.
-				$nuevoProducto= new ModeloUsuario($datos);
-				$nuevoProducto->agregarUsuario();
+				$nuevoVendedor= new ModeloUsuario($datos);
+				$nuevoVendedor->agregarUsuario();
 				$this->session->set_flashdata('mensaje',"El usuario fue agregado con exito.");
 				
 				redirect('/usuarios/listar');
@@ -353,44 +302,25 @@
 		 
 		 
 	}
+	/**
+	 * Recibe los datos del formulario para editar un usuario en general.
+	 * @return unknown_type
+	 */
 	public function actualizar() {
 	$this->load->helper(array('form', 'url'));
 		//Validacion de formulario.
+		$this->validar_formulario_usuario(true);
 		$this->load->library('form_validation');
-		 
-		$this->form_validation->set_error_delimiters('<li>', '</li>');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'required');
-		$this->form_validation->set_rules('apellido', 'Apellidos', 'required');
-		$this->form_validation->set_rules('direccion', 'Direccion', 'required');
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('telefono', 'Telefono', 'numeric');
-		$this->form_validation->set_rules('celular', 'Celular', 'numeric');
-		$this->form_validation->set_rules('barrio_id', 'Barrio', 'callback_barrio_check');
-		$this->form_validation->set_message('barrio_check', "Debe seleccionar algun barrio.");
-		$this->form_validation->set_rules('rol_id', 'Rol', 'callback_rol_check');
-		$this->form_validation->set_message('rol_check', "Debe seleccionar algun rol.");
-
+		
 		if ($this->form_validation->run() == FALSE)
 		{
-			//Hago lo mismo que en la funcion agregar.
+			//Traigo los datos para el formulario.
+			$this->data['id']=$_POST['id'];
+			$this->data['usuario']=$this->ModeloUsuario->getUsuario($_POST['id']);
+			$this->data['roles'] =$this->traerRoles();	
+			$this->data['ciudades'] =$this->traerCiudades();
 			
-			$roles= $this->ModeloRol->getAllRoles();
-			//Preparo el vector Roles para pasarle a la vista.
-			foreach ($roles as $rol){
-				$op[$rol['id']]= $rol['nombre'];
-			}
-	
-			$this->data['roles'] =$op;	
-				
-			
-			
-			$city= $this->ModeloCiudad->getAllCiudades();
-			//Preparo el vector Ciudades para pasarle a la vista.
-			foreach ($city as $ciudad){
-				$opciones[$ciudad['id']]= $ciudad['nombre'];
-			}
-	
-			$this->data['ciudades'] =$opciones;
+			$this->data['supervisores']=$this->traerSupervisores();
 			$this->data['main']='usuarios/editar';
 			$this->load->vars($this->data);
 			$this-> load-> view('template');
@@ -432,6 +362,10 @@
 		
 	}
 	public function rol_check($str) {
+		//Si no es un numero es el valor "ape". O sea no eligio nada.
+		return is_numeric($str);
+	}
+ 	public function supervisor_check($str) {
 		//Si no es un numero es el valor "ape". O sea no eligio nada.
 		return is_numeric($str);
 	}
@@ -491,6 +425,41 @@
 		}
 		return $op;
 	}
-	
+	/**
+	 * 
+	 * @param $isEditar Indica si el formulario es un editar, o es un crear.
+	 * @return unknown_type
+	 */
+	function validar_formulario_usuario($isEditar) {
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters('<li>', '</li>');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'required');
+		$this->form_validation->set_rules('apellido', 'Apellidos', 'required');
+		$this->form_validation->set_rules('direccion', 'Direccion', 'required');
+		$this->form_validation->set_rules('username', 'Username', 'required');
+		if($isEditar)
+		{
+			$this->form_validation->set_rules('password', 'Contraseña', 'matches[co_password]');
+			$this->form_validation->set_rules('co_password', 'Confirmar Contraseña');
+		}else
+		{
+			$this->form_validation->set_rules('password', 'Contraseña', 'required|matches[co_password]');
+			$this->form_validation->set_rules('co_password', 'Confirmar Contraseña', 'required');	
+		}
+		
+		$this->form_validation->set_rules('telefono', 'Telefono', 'numeric');
+		$this->form_validation->set_rules('celular', 'Celular', 'numeric');
+		$this->form_validation->set_rules('barrio_id', 'Barrio', 'callback_barrio_check');
+		$this->form_validation->set_message('barrio_check', "Debe seleccionar algun barrio.");
+		$this->form_validation->set_rules('rol_id', 'Rol', 'callback_rol_check');
+		$this->form_validation->set_message('rol_check', "Debe seleccionar algun rol.");
+		
+		if($_POST['rol_id']==3)//Si el rol es un vendedor se requiere un supervisor.
+		{
+			$this->form_validation->set_rules('supervisor_id', 'Supervisor', 'callback_supervisor_check');
+			$this->form_validation->set_message('supervisor_check', "Debe seleccionar algun supervisor para el vendedor.");	
+		}
+		
+	}
  }
 ?>

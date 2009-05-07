@@ -1,4 +1,4 @@
-<h2>Lista de Usuarios</h2>
+<h2>Ver <?= $usuario['rol']?></h2>
 
 
 <ul>
@@ -9,7 +9,10 @@
     <li>Ciudad: <?= $usuario['ciudad']?></li><br>
     <li>Telefono: <?= $usuario['telefono']?></li><br>
     <li>Celular: <?= $usuario['celular']?></li><br>
-    <li>Rol:<?= $usuario['rol']?></li>
+    <li>Rol:<?= $usuario['rol']?></li><br>
+    <?php if($usuario['supervisor']): ?>
+    	<li>Supervisor:<?= $usuario['supervisor']?></li><br>
+    <?php endif;?>
 </ul>
 
 <?php echo anchor("usuarios/listar",'Volver');?>

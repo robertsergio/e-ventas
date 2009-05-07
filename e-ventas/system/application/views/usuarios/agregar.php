@@ -66,9 +66,20 @@
 			<tr>
 				<td><b>Rol:</b></td>
 				<td>
-					<select name="rol_id" id="rol_id" >
+					<select name="rol_id" id="rol_id" onchange="cargar_supervisor()">
 						<option value="ape">[Seleccione un Rol]</option>
         				<?php foreach($roles as $key => $value):?> 
+        					<option value="<?=$key ?>"><?=$value ?></option>
+        				<?php endforeach;?> 
+        			</select>
+				</td>
+			</tr>
+			<tr id="supervisores" style="visibility:hidden;">
+				<td><b>Supervisor:</b></td>
+				<td>
+					<select name="supervisor_id" id="supervisor_id" >
+						<option value="ape">[Seleccione un Supervisor]</option>
+        				<?php foreach($supervisor as $key => $value):?> 
         					<option value="<?=$key ?>"><?=$value ?></option>
         				<?php endforeach;?> 
         			</select>

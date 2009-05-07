@@ -16,3 +16,15 @@ function aviso_borrar(controlador,nombre, id){
     if(confirm("Esta seguro que desea BORRAR a \"" + nombre+"\"?"))
         document.location.href=baseUrl+controlador+"/borrar/"+id;
 }
+
+function cargar_supervisor() {
+	supervisor=document.getElementById('supervisores');
+	rol=document.getElementById('rol_id');
+	if(rol.value!=3)
+    {
+    	supervisor.style.visibility ='hidden';
+    }else
+    	supervisor.style.visibility ='visible';
+    	
+	
+}

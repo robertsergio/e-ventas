@@ -1,4 +1,4 @@
-<h2>Lista de Vendedor</h2>
+<h2>Ver Vendedor</h2>
 
 
 <ul>

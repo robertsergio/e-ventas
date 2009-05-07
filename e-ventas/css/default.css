@@ -17,8 +17,6 @@ body {
 	margin: 10px auto;
 	padding: 10px;
 	background-color: #f1f1f1;
-	
-	
 	border: 10px solid #ccc;
 	padding: 10px 10px 20px 10px;
 }
@@ -32,8 +30,9 @@ body {
 
 #nav {
 	 width: 140px;
-	 margin-top: 50px;
+	 margin: 50px 0 0 0;
 	 float: left;
+	 display: inline;
 }
 .titulonav{   
    border-width: 1px;
@@ -86,9 +85,10 @@ body {
 } 
 #main {
 	
-	margin-left: 170px;
+	margin: 0 0 0 170px ;
 	width: 800px;
 	height: auto;
+	padding: 0
 }
 
 #header {

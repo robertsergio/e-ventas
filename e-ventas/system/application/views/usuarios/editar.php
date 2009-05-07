@@ -1,5 +1,5 @@
 
-<h2>Editar Usuario</h2>
+<h2>Editar <?= $usuario['rol']?></h2>
 
 <ul>
 	<?php echo validation_errors(); ?>
@@ -23,7 +23,11 @@
 			</tr>
 			<tr>
 				<td><b>Contraseña:</b></td>
-				<td><?php echo form_input('password');?></td>
+				<td><?php echo form_password('password');?></td>
+			</tr>
+			<tr>
+				<td><b>Confirmar Contraseña:</b></td>
+				<td><?php echo form_password('co_password');?></td>
 			</tr>
 			<tr>
 				<td><b>Direccion:</b></td>
@@ -85,7 +89,7 @@
 			<tr>
 				<td><b>Rol:</b></td>
 				<td>
-					<select name="rol_id" id="rol_id" >
+					<select name="rol_id" id="rol_id" onchange="cargar_supervisor()">
 						<option value="ape">[Seleccione un Rol]</option>
         				<?php foreach($roles as $key => $value)
         					{
@@ -101,6 +105,25 @@
         			</select>
 				</td>
 			</tr>
+			<tr id="supervisores" style="visibility:<?= $usuario['rol_id']!=3?'hidden;':'visible;'?>">
+				<td><b>Supervisor:</b></td>
+					<td>
+						<select name="supervisor_id" id="supervisor_id" >
+							<option value="ape">[Seleccione un Supervisor]</option>
+	        				<?php foreach($supervisor as $key => $value)
+	        				{ 
+	        					if($key==$usuario['supervisor_id'])
+			        			{
+			        				echo '<option value="'.$key.'" selected="selected" >'.$value.'</option>';
+			        			}else
+			        			{
+			        				echo '<option value="'.$key.'">'.$value.'</option>';
+			        			}
+	        				}
+	        				?> 
+	        			</select>
+					</td>
+			</tr>
 		</tbody>
 	</table>
 	<br>
@@ -109,4 +132,4 @@
 
 <?php echo form_close()?>
 
-<?php echo anchor("usuarios/",'Volver');?><br>
+<?php echo anchor("usuarios/listar",'Volver');?><br>
