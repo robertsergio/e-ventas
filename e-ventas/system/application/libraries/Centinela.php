@@ -41,7 +41,9 @@ class Centinela
 						'Gestionar Usuarios'=>'usuarios/listar',
 						'Gestionar Productos'=>'productos/listar',
 						'Gestionar Pedidos'=>'#',
+						'Consultar Comisiones'=>'#',
 						'Gestionar Clientes'=>'#',
+						'Registrar Pagos'=>'#',
 						'Mensajes'=>'#',
 						);
 		$navVendedor=array(

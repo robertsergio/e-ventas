@@ -63,4 +63,4 @@
 
 <?php echo form_close();?>
 
-<?php echo anchor("productos/",'Volver');?><br>
+<?php echo anchor("productos/listar",'Volver');?><br>

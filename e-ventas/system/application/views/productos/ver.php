@@ -9,7 +9,7 @@
     		if($key=='precio'|| $key=='comision')
     			echo '<li>'.ucfirst($key).': '.$valor.' Gs.</li><br>';
     		else
-    			echo '<li>'.ucfirst($key).': '.$valor.'</li><br>';
+    			echo '<li>'.ucfirst($key).':</li><br>'.$valor;
     	}	
     		
     } ?>
@@ -18,5 +18,5 @@
      
 </ul>
 
-<?php echo anchor("productos/",'Volver');?>
+<?php echo anchor("productos/listar",'Volver');?>
 
