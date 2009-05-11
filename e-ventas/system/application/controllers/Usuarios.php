@@ -63,7 +63,8 @@
 		$this->session->set_flashdata('mensaje',"El usuario fue borrado con exito.");
 		redirect('/usuarios/listar');
 	}
- 	//Redirecciona al formulario que sera editado.
+ 	
+	//Redirecciona al formulario que sera editado.
 	public function editar($id) {
 		$this->data['usuario']=$this->ModeloUsuario->getUsuario($id);
 		$this->data['id']=$id;
@@ -327,21 +328,16 @@
 		}
 		else
 		{
-				$datos['id']=$_POST['id'];
-				$datos['nombre']=$_POST['nombre'];
-				$datos['apellido']=$_POST['apellido'];
+				$datos=$_POST;
+				
 				$datos['username']=strtolower($_POST['username']);//Username se guarda en minusculas.
-				
-				if($_POST['password']!="")
-					$datos['password']=md5($_POST['password']);//El password se guarda en md5.
-				
-				$datos['apellido']=$_POST['apellido'];
-				$datos['direccion']=$_POST['direccion'];
-				$datos['barrio_id']=$_POST['barrio_id'];
-				$datos['email']=$_POST['email'];
-				$datos['telefono']=$_POST['telefono'];
-				$datos['celular']=$_POST['celular'];
-				$datos['rol_id']=$_POST['rol_id'];
+				$datos['password']=md5($_POST['password']);//El password se guarda en md5.
+				//borro los datos basura que no me sirven.
+				unset($datos['guardar']);
+				unset($datos['co_password']);
+				unset($datos['ciudad']);
+				if($_POST['rol_id']!=3)//Si el rol no es un vendedor no se requiere un supervisor.
+					unset($datos['supervisor_id']);
 				
 				//Guardo los datos del producto en la base de datos.
 				$nuevoProducto= new ModeloUsuario($datos);

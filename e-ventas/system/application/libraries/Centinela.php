@@ -42,7 +42,7 @@ class Centinela
 						'Gestionar Productos'=>'productos/listar',
 						'Gestionar Pedidos'=>'#',
 						'Consultar Comisiones'=>'#',
-						'Gestionar Clientes'=>'#',
+						'Gestionar Clientes'=>'clientes/listar',
 						'Registrar Pagos'=>'#',
 						'Mensajes'=>'#',
 						);
@@ -50,7 +50,7 @@ class Centinela
 						'Solicitar pedido'=>'productos/carrito',
 						'Consultar pedidos'=>'#',
 						'Consultar Comisiones'=>'#',
-						'Gestionar Clientes'=>'#',
+						'Gestionar Clientes'=>'clientes/mis_clientes',
 						'Cambiar Pagina de Inicio'=>'#',
 						'Consultar Ventas'=>'#',
 						'Ver Mensajes'=>'#',
@@ -120,9 +120,9 @@ class Centinela
 		//El vector de permisos tiene como clave el nombre del controlador y valor el nombre de la operacion.
 		$Admin=array(
 						'usuarios'=>array('listar','ver','borrar','editar','agregar','crear','actualizar'),
-						'productos'=>array('listar','ver','borrar','editar','agregar','crear','actualizar')
-						
-						);
+						'productos'=>array('listar','ver','borrar','editar','agregar','crear','actualizar'),
+						'clientes'=>array('listar','ver','borrar','editar','agregar','crear','actualizar'),
+					);
 		$Vendedor=array(
 						'productos'=>array('carrito','agregarCarrito','verCarrito')
 						

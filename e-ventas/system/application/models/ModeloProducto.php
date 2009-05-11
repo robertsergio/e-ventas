@@ -10,10 +10,6 @@ class ModeloProducto  extends Model
 {
 	 
 	public $datos= null;
-
-
-
-	
 	/**
 	 * Es el constructor de la clase. No se por que el parametro se debe igualar a null.
 	 * @param $dat Datos que identifica a un producto.
