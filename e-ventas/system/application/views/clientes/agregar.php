@@ -59,17 +59,22 @@
 				<td><b>E_mail:</b></td>
 				<td><?php echo form_input('email',set_value('email'));?></td>
 			</tr>
-			<tr>
-				<td><b>Vendedor:</b></td>
-				<td>
-					<select name="vendedor_id" id="vendedor_id" >
-						<option value="ape">[Seleccione un Vendedor]</option>
-        				<?php foreach($vendedores as $key => $value):?> 
-        					<option value="<?=$key ?>"><?=$value ?></option>
-        				<?php endforeach;?> 
-        			</select>
-				</td>
-			</tr>
+			
+			<?php if($rol_id==3)://El rol 3 es el vendedor?>
+					<?php echo form_hidden('vendedor_id',$creador_id);?>
+			<?php else:?>
+					<tr>
+						<td><b>Vendedor:</b></td>
+						<td>
+							<select name="vendedor_id" id="vendedor_id" >
+								<option value="ape">[Seleccione un Vendedor]</option>
+				   				<?php foreach($vendedores as $key => $value):?> 
+				     					<option value="<?=$key ?>"><?=$value ?></option>
+				   				<?php endforeach;?> 
+				   			</select>
+						</td>
+					</tr>
+			<?php endif;?>
 				
 		</tbody>
 	</table>
@@ -79,4 +84,8 @@
 
 <?php echo form_close()?>
 
-<?php echo anchor("clientes/listar",'Volver');?><br>
+<?php if($rol_id==3)://El link de volver, depende del rol.?>
+		<?php echo anchor("clientes/mis_clientes",'Volver');?><br>		
+<?php else:?>
+		<?php echo anchor("clientes/listar",'Volver');?><br>		
+<?php endif;?>		

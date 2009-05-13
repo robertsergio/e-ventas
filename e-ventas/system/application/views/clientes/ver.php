@@ -11,9 +11,15 @@
     <li>Ciudad: <?= $cliente['ciudad']?></li><br>
     <li>Telefono: <?= $cliente['telefono']?></li><br>
     <li>Celular: <?= $cliente['celular']?></li><br>
-    <li>Vendedor:<?= $cliente['vendedor']?></li><br>
+    <?php if($rol_id!=3)://Si no es vendedor.?>
+    	<li>Vendedor: <?= $cliente['vendedor']?></li><br>
+    <?php endif;?>
     
 </ul>
 
-<?php echo anchor("clientes/listar",'Volver');?>
+    <?php if($rol_id==3)://El link de volver, depende del rol.?>
+		<?php echo anchor("clientes/mis_clientes",'Volver');?><br>		
+	<?php else:?>
+		<?php echo anchor("clientes/listar",'Volver');?><br>		
+	<?php endif;?>
 

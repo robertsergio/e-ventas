@@ -62,7 +62,7 @@ class ModeloCliente extends Model {
 	 */
 	public function getCliente($id)
 	{
-		$consulta='select clientes.*, b.*, usuarios.username as vendedor
+		$consulta="select clientes.*, b.*, usuarios.username as vendedor
  					from clientes
  						inner join usuarios on (clientes.vendedor_id=usuarios.id)
  						inner join (select barrios.id as barrio_id, 
@@ -72,23 +72,40 @@ class ModeloCliente extends Model {
              						from barrios 
                   						inner join ciudades on (barrios.`ciudad_id`=ciudades.id)
             						) as b
- 						on (clientes.`barrio_id`=b.barrio_id);';
+ 						on (clientes.`barrio_id`=b.barrio_id)
+ 					where
+     					clientes.id=$id";
+		
 		$query =$this->db->query($consulta);
 		
 		if ($query->num_rows() > 0)
 		{
    		   $row = $query->row_array();
-		   
+		   $query-> free_result();
+		    return $row;
 		} 
 			
-		$query-> free_result();
-		return $row;
+		return null;
 	}
-	public function getAllClientes($cantidad=0, $offset=0)
+	
+	
+	/**
+	 * Trae todos los clientes que le pertenecen al vendedor con id dado,
+	 * trayendo la cantidad de registros especificado, a partir de un registro 
+	 * dado. Si no se especifica el id se traen todos los clientes, lo mismo sucede
+	 * cuando no se especifica la cantidad.
+	 * @param $id_vendedor Es el id del vendedor.
+	 * @param $cantidad Numero de registros que se quiere recuperar.
+	 * @param $offset Desde que registro se quiere traer.
+	 */
+	public function getAllClientes($cantidad=0, $offset=0,$id_vendedor=0)
 	{
 		$data = array();
 		$this-> db-> select('id,nombre,ruc,telefono');
 		$this-> db-> where('borrado','false');
+		
+		if($id_vendedor!=0)
+			$this-> db-> where('vendedor_id',$id_vendedor);
 		
 		if($cantidad==0)
 			$Q = $this-> db-> get('clientes');
@@ -97,8 +114,6 @@ class ModeloCliente extends Model {
 
 		if ($Q-> num_rows() > 0){
 			foreach ($Q-> result_array() as $row){
-
-
 				$data[] = array(
                     'id'=>$row['id'],
                     'nombre'=>$row['nombre'],
@@ -110,9 +125,19 @@ class ModeloCliente extends Model {
 		$Q-> free_result();
 		return $data;
 	}
-	public function cantidad_filas()
+	
+	/**
+	 * Trae la cantidad de clientes que tiene un vendedor especificado. 
+	 * Si no se especifica el vendedor, se trae la cantidad total de clientes
+	 * que tiene el sistema.
+	 * @param $id_vendedor Es el id del vendedor.
+	 */
+	public function cantidad_filas($id_vendedor=0)
 	{
-		$query =$this->db->getwhere('clientes',array('borrado'=>'false'));
+		if($id_vendedor!=0)
+			$query =$this->db->getwhere('clientes',array('borrado'=>'false','vendedor_id'=>$id_vendedor));
+		else
+			$query =$this->db->getwhere('clientes',array('borrado'=>'false'));
 		return $query->num_rows();
 	}
 }

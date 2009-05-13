@@ -25,8 +25,36 @@ class Clientes extends Controller{
 		$this->load->vars($this->data);
 		$this-> load-> view('template');
 	}
+	/**
+	 * Lista todos los vendedores que tiene el sistema.
+	 * Para listar todos los 
+	 */
+ 	public function mis_clientes()
+ 	{
+		$user_id =$this->session->userdata('id');//El id del supervisor.
+ 		//Traigo la libreria para la paginacion.
+		$this->load->library('pagination');
+				
+		//Otras configuraciones para la paginacion estan en  config/pagination.php
+		$config['base_url']= base_url()."/usuarios/mis_clientes/";
+		$config['total_rows']= $this->ModeloCliente->cantidad_filas($user_id);//Cantidad de clientes que tiene un vendedor.
+		$config['per_page'] = '4'; //Cantidad por pagina.
+		$this->pagination->initialize($config);
+		
+		$offset=$this->uri->segment($this->uri->total_segments()); //Traigo el ultimo segmento.
+		$this->data['items']= $this->ModeloCliente->getAllClientes($config['per_page'],$offset,$user_id);
+		
+		$this->data['main']='clientes/listar';
+		
+		$this->load->vars($this->data);
+		$this-> load-> view('template');
+		
+	}
+	
 	
 	public function ver($id) {
+		$this->data['rol_id'] =$this->session->userdata('rol_id');
+		
 		$this->data['cliente']=$this->ModeloCliente->getCliente($id);
 		$this->data['main']='clientes/ver';
 		$this->load->vars($this->data);
@@ -39,10 +67,12 @@ class Clientes extends Controller{
 	 */
 	public function agregar() {
 
+		$this->data['creador_id'] =$this->session->userdata('id');
+		$this->data['rol_id'] =$this->session->userdata('rol_id');
+		
 		//Traigo las ciudades y los roles.
 		$this->data['ciudades'] =$this->traerCiudades();
 		$this->data['vendedores'] =$this->traerVendedores();
-				
 		$this->data['main']='clientes/agregar';
 		$this->load->vars($this->data);
 		$this-> load-> view('template');
@@ -57,11 +87,21 @@ class Clientes extends Controller{
 	public function borrar($id) {
 		$this->ModeloCliente->borrarCliente($id);
 		$this->session->set_flashdata('mensaje',"El usuario fue borrado con exito.");
-		redirect('/clientes/listar');
+		
+		$rol_id=$this->session->userdata('rol_id');
+		if($rol_id==3)//Si soy vendedor, solo puedo ver mis clientes.
+			redirect('/clientes/mis_clientes');
+		else
+			redirect('/clientes/listar');
+		
 	}
 	
 	//Redirecciona al formulario que sera editado.
 	public function editar($id) {
+		//Datos necesarios para que un vendedor edite un cliente suyo.
+		$this->data['creador_id'] =$this->session->userdata('id');
+		$this->data['rol_id'] =$this->session->userdata('rol_id');
+		//Traigo el cliente que queremos editar.
 		$this->data['cliente']=$this->ModeloCliente->getCliente($id);
 		$this->data['id']=$id;
 		//Traigo las ciudades y los roles para el select.
@@ -95,6 +135,7 @@ class Clientes extends Controller{
 		else
 		{
 				$datos=$_POST;
+				$rol_id=$this->session->userdata('rol_id');
 				
 				//borro los datos basura que no me sirven.
 				unset($datos['agregar']);
@@ -104,7 +145,10 @@ class Clientes extends Controller{
 				$nuevoVendedor->agregarCliente();
 				$this->session->set_flashdata('mensaje',"El cliente fue agregado con exito.");
 				
-				redirect('/clientes/listar');
+				if($rol_id==3)//Si soy vendedor, solo puedo ver mis clientes.
+					redirect('/clientes/mis_clientes');
+				else
+					redirect('/clientes/listar');
 
 		}
 	}
@@ -132,7 +176,7 @@ class Clientes extends Controller{
 		else
 		{
 				$datos=$_POST;
-				
+				$rol_id=$this->session->userdata('rol_id');
 				//borro los datos basura que no me sirven.
 				unset($datos['guardar']);
 				unset($datos['ciudad']);
@@ -141,7 +185,11 @@ class Clientes extends Controller{
 				$nuevoVendedor->actualizarCliente();
 				$this->session->set_flashdata('mensaje',"El cliente fue editado con exito.");
 				
-				redirect('/clientes/listar');
+				if($rol_id==3)//Si soy vendedor, solo puedo ver mis clientes.
+					redirect('/clientes/mis_clientes');
+				else
+					redirect('/clientes/listar');
+				
 
 		}
 	}

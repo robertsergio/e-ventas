@@ -121,11 +121,11 @@ class Centinela
 		$Admin=array(
 						'usuarios'=>array('listar','ver','borrar','editar','agregar','crear','actualizar'),
 						'productos'=>array('listar','ver','borrar','editar','agregar','crear','actualizar'),
-						'clientes'=>array('listar','ver','borrar','editar','agregar','crear','actualizar'),
+						'clientes'=>array('listar','mis_clientes','ver','borrar','editar','agregar','crear','actualizar'),
 					);
 		$Vendedor=array(
-						'productos'=>array('carrito','agregarCarrito','verCarrito')
-						
+						'productos'=>array('carrito','agregarCarrito','verCarrito'),
+						'clientes'=>array('mis_clientes','ver','borrar','editar','agregar','crear','actualizar')
 						);
 		$Supervisor=array(
 						'usuarios'=>array('listarVendedor','verVendedor','borrarVendedor','editarVendedor','agregarVendedor','crearVendedor','actualizarVendedor')
