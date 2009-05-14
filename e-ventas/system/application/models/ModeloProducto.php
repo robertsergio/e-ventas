@@ -9,7 +9,7 @@
 class ModeloProducto  extends Model
 {
 	 
-	public $datos= null;
+	var $datos= null;
 	/**
 	 * Es el constructor de la clase. No se por que el parametro se debe igualar a null.
 	 * @param $dat Datos que identifica a un producto.
@@ -122,7 +122,6 @@ class ModeloProducto  extends Model
 				$data[] = array(
                     'id'=>$row['id'],
                     'nombre'=>$row['nombre'],
-                    'descripcion'=>$row['descripcion'],
                     'precio'=>$row['precio'],
 					'imagen'=>$row['imagen'],
 				);

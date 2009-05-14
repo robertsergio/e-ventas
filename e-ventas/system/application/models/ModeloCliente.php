@@ -140,5 +140,22 @@ class ModeloCliente extends Model {
 			$query =$this->db->getwhere('clientes',array('borrado'=>'false'));
 		return $query->num_rows();
 	}
+	public function buscarClienteDeVendedor($id_vendedor,$ci_cliente) {
+		/**
+		 * @todo Falta hacer la consulta aca.
+		 */
+		$consulta="";
+		
+		$query =$this->db->query($consulta);
+		
+		if ($query->num_rows() > 0)
+		{
+   		   $row = $query->row_array();
+		   $query-> free_result();
+		    return $row;
+		} 
+			
+		return null;
+	}
 }
 ?>

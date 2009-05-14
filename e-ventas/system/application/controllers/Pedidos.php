@@ -6,7 +6,8 @@ class Pedidos extends Controller
 	}
 	
 	function hacerPedido() {
-		;
+		$productos=$this->session->userdata('cart');
+		
 	}
 }
 
