@@ -141,10 +141,7 @@ class ModeloCliente extends Model {
 		return $query->num_rows();
 	}
 	public function buscarClienteDeVendedor($id_vendedor,$ci_cliente) {
-		/**
-		 * @todo Falta hacer la consulta aca.
-		 */
-		$consulta="";
+		$consulta="select * from clientes where ci=$ci_cliente and vendedor_id=$id_vendedor";
 		
 		$query =$this->db->query($consulta);
 		

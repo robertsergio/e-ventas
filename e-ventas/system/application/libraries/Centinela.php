@@ -125,7 +125,8 @@ class Centinela
 					);
 		$Vendedor=array(
 						'productos'=>array('carrito','agregarCarrito','verCarrito'),
-						'clientes'=>array('mis_clientes','ver','borrar','editar','agregar','crear','actualizar')
+						'clientes'=>array('mis_clientes','ver','borrar','editar','agregar','crear','actualizar'),
+						'pedidos'=>array('hacerPedido','ajaxFindCliente')
 						);
 		$Supervisor=array(
 						'usuarios'=>array('listarVendedor','verVendedor','borrarVendedor','editarVendedor','agregarVendedor','crearVendedor','actualizarVendedor')

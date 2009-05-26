@@ -23,6 +23,6 @@
    <?php else :
    			echo 'El carrito está vacío.'; 
    		endif;?>
-	
-			
+		
+	<?=anchor('/pedidos/hacerPedido','Hacer Pedido');?>		
 </table>

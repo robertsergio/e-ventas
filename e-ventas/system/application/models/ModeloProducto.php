@@ -124,6 +124,7 @@ class ModeloProducto  extends Model
                     'nombre'=>$row['nombre'],
                     'precio'=>$row['precio'],
 					'imagen'=>$row['imagen'],
+					'descripcion'=>$row['descripcion'],
 				);
 			}
 		}

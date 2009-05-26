@@ -28,3 +28,9 @@ function cargar_supervisor() {
     	
 	
 }
+
+function buscarCliente() {
+	
+	new Ajax.Updater('datos_cliente', baseUrl+'pedidos/ajaxFindCliente', {method:'post', postBody:'ci='+$F('cliente')});
+	
+}

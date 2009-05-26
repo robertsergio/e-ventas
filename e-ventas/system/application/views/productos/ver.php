@@ -7,9 +7,9 @@
     	if($key!='imagen')
     	{
     		if($key=='precio'|| $key=='comision')
-    			echo '<li>'.ucfirst($key).': '.$valor.' Gs.</li><br>';
+    			echo '<li>'.ucfirst($key).': '.$valor.' Gs.</li>';
     		else
-    			echo '<li>'.ucfirst($key).':</li><br>'.$valor;
+    			echo '<li>'.ucfirst($key).':</li>'.$valor;
     	}	
     		
     } ?>

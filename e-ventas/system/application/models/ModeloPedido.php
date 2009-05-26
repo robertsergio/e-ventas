@@ -27,7 +27,7 @@ class ModeloPedido extends Model {
 	 * @param $productos Es un vector que contiene los productos a ser insertados.
 	 * @return unknown_type
 	 */
-	function agregarProductoAPedido() {
+	function agregarProductosAPedido() {
 		if($this->datos==null || $this->productos==null)
 			show_error("ERROR al agregar productos a un pedido, Constructor mal usado.");
 		else
